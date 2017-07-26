@@ -1,0 +1,27 @@
+<link rel="import" href="../head.html?__inline">
+<script src="../../js/app/general/recipient-account-addedit.js"></script>
+<div class="place">
+    <span>位置：</span>
+    <ul>
+        <li>系统管理</li>
+        <li>运营数据</li>
+        <li id="operContent">新增合同模板</li>
+    </ul>
+</div>
+<form id="jsForm">
+    <input type="hidden" id="id" name="id" />
+    <div class="form-body">
+        <div class="form-title"><span>合同模板信息</span></div>
+        <ul class="form-info">
+            <li><label><b>*</b>标题:</label><input type="text" id="title" name="title" class="control-def" /></li>
+            <li><label><b>*</b>内容:</label>
+                <script id="content" name="content" type="text/plain" style="width:800px;height:250px;float:left"></script>
+            </li>
+            <li><label><b>*</b>类型</label><select id="type" name="type" class="control-def"></select></li>
+            <li><label><b>*</b>状态</label><select id="status" name="status" class="control-def"></select></li>
+            <li><label><b></b>备注:</label><input type="text" id="remark" name="remark" class="control-def" /></li>
+            <li><input id="subBtn" type="button" class="btn margin-left-100" value="保存" /><input id="backBtn" type="button" class="btn margin-left-20" value="返回" /></li>
+        </ul>
+    </div>
+</form>
+<link rel="import" href="../foot.html?__inline">

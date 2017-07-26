@@ -1,0 +1,18 @@
+<link rel="import" href="../head.html?__inline">
+<script src="../../js/app/account/js/sys-account.js"></script>
+<div class="place">
+    <span>位置：</span>
+    <ul>
+    </ul>
+</div>
+<div class="form-body">
+    <div class="form-title"><span>账户信息</span></div>
+    <ul class="form-info">
+        <li><label>账号:</label><span id="accountNumber" style="display:inline;"></span></li>
+        <li><label>状态:</label><span id="status"></span></li>
+        <li style="display: none;"><label>币种:</label><span id="currency"></span></li>
+        <li><label>可用余额:</label><span id="amount"></span><a id="blue" class="margin-left-100" href="javascript:void(0);" onclick="redirectAmountJour() " style="color:#00F;">查看资金流水</a></li>
+        <li><label>冻结金额:</label><span id="frozenAmount"></span><a id="blue1" class="margin-left-100" href="javascript:void(0);" onclick="redirectFrozenAmountJour() " style="color:#00F;">查看冻结流水</a></li>
+    </ul>
+</div>
+<link rel="import" href="../foot.html?__inline">
