@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnjr.mall.dao.IOrderDAO">
+	<resultMap id="order_DB_Result" type="order">
+		<result column="code" property="code" />
+		<result column="type" property="type" />
+		<result column="to_user" property="toUser" />
+		<result column="store_code" property="storeCode" />
+		<result column="receiver" property="receiver" />
+		<result column="re_mobile" property="reMobile" />
+		
+		
+		<result column="re_address" property="reAddress" />
+		<result column="receipt_type" property="receiptType" />
+		<result column="receipt_title" property="receiptTitle" />
+		<result column="apply_user" property="applyUser" />
+		<result column="apply_note" property="applyNote" />
+		
+		<result column="apply_datetime" property="applyDatetime" />
+		<result column="amount1" property="amount1" />
+		<result column="amount2" property="amount2" />
+		<result column="amount3" property="amount3" />
+		<result column="yunfei" property="yunfei" />
+		
+		<result column="status" property="status" />
+		<result column="pay_group" property="payGroup" />
+		<result column="pay_code" property="payCode" />
+		<result column="pay_datetime" property="payDatetime" />
+		<result column="pay_amount1" property="payAmount1" />
+		
+		<result column="pay_amount1_1" property="payAmount11" />
+		<result column="pay_amount2" property="payAmount2" />
+		<result column="pay_amount3" property="payAmount3" />
+		<result column="prompt_times" property="promptTimes" />
+		<result column="deliverer" property="deliverer" />
+		
+		<result column="delivery_datetime" property="deliveryDatetime" />
+		<result column="logistics_company" property="logisticsCompany" />
+		<result column="logistics_code" property="logisticsCode" />
+		<result column="pdf" property="pdf" />
+		<result column="updater" property="updater" />
+		
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+		<result column="company_code" property="companyCode" />
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="toUser != null and toUser != '' ">
+				AND t.to_user = #{toUser}
+			</if>
+			<if test="storeCode != null and storeCode != '' ">
+				AND t.store_code = #{storeCode}
+			</if>
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+			<if test="applyDatetimeStart != null and applyDatetimeStart != '' ">
+				<![CDATA[AND t.apply_datetime >= #{applyDatetimeStart}]]>
+			</if>
+			<if test="applyDatetimeEnd != null and applyDatetimeEnd != '' ">
+				<![CDATA[AND t.apply_datetime <= #{applyDatetimeEnd}]]>
+			</if>
+			<if test="status != null and status != '' ">
+				<choose>
+					<when test='status == "payed"'>
+						AND t.status not in(1)
+					</when>
+					<when test='status == "effect"'>
+						AND t.status not in(1,91)
+					</when>
+				    <otherwise>
+						AND t.status = #{status}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="statusList != null and statusList != '' ">
+				AND t.status in 
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>
+			<if test="payCode != null and payCode != '' ">
+				AND t.pay_code = #{payCode}
+			</if>
+			<if test="deliverer != null and deliverer != '' ">
+				AND t.deliverer = like "%"#{deliverer}"%"
+			</if>
+			<if test="logisticsCode != null and logisticsCode != '' ">
+				AND t.logistics_code = like "%"#{logisticsCode}"%"
+			</if>
+			<if test="logisticsCompany != null and logisticsCompany != '' ">
+				AND t.logistics_company = #{logisticsCompany}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_order" parameterType="order" resultMap="order_DB_Result">
+		SELECT
+		t.code
+		,t.type
+		,t.to_user
+		,t.store_code
+		,t.receiver
+		,t.re_mobile
+		
+		,t.re_address
+		
+		,t.apply_user
+		,t.apply_note
+		
+		,t.apply_datetime
+		,t.amount1
+		,t.amount2
+		,t.amount3
+		,t.yunfei
+		
+		,t.status
+		,t.pay_group
+		,t.pay_code
+		,t.pay_datetime
+		,t.pay_amount1
+		
+		
+		,t.pay_amount2
+		,t.pay_amount3
+		,t.prompt_times
+		,t.deliverer
+		
+		,t.delivery_datetime
+		,t.logistics_company
+		,t.logistics_code
+		,t.pdf
+		,t.updater
+		
+		,t.update_datetime
+		,t.remark
+		,t.company_code
+		,t.system_code
+		FROM
+		tmall_order t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_order_count" parameterType="order"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tmall_order t 
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_order" parameterType="order">
+		INSERT INTO tmall_order(
+		code
+		,type
+		,to_user
+		,store_code
+		,receiver
+		,re_mobile
+		
+		,re_address
+		
+		,apply_user
+		,apply_note
+		
+		,apply_datetime
+		,amount1
+		,amount2
+		,amount3
+		,yunfei
+		
+		,status
+		,prompt_times
+		,updater
+		,update_datetime
+		,remark
+		
+		,pay_amount1
+		
+		,pay_amount2
+		,pay_amount3
+		,company_code
+		
+		,system_code
+		)
+		VALUES(
+		#{code}
+		,#{type}
+		,#{toUser}
+		,#{storeCode}
+		,#{receiver}
+		,#{reMobile}
+		
+		,#{reAddress}
+		
+		,#{applyUser}
+		,#{applyNote}
+		
+		,#{applyDatetime}
+		,#{amount1}
+		,#{amount2}
+		,#{amount3}
+		,#{yunfei}
+		
+		,#{status}
+		,#{promptTimes}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		
+		,#{payAmount1}
+		
+		,#{payAmount2}
+		,#{payAmount3}
+		,#{companyCode}
+		
+		,#{systemCode}
+		)
+	</insert>
+
+	<update id="update_userCancel" parameterType="order">
+		UPDATE tmall_order
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE
+		code = #{code}
+	</update>
+	
+	<update id="update_platCancel" parameterType="order">
+		UPDATE tmall_order
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE
+		code = #{code}
+	</update>
+	
+	
+	<update id="update_deliverLogistics" parameterType="order">
+		UPDATE tmall_order
+		SET
+		status = #{status}
+		,deliverer = #{deliverer}
+		,delivery_datetime = #{deliveryDatetime}
+		,logistics_company = #{logisticsCompany}
+		,logistics_code = #{logisticsCode}
+		,pdf = #{pdf}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE
+		code = #{code}
+	</update>
+	
+	<update id="update_deliverXianchang" parameterType="order">
+		UPDATE tmall_order
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE
+		code = #{code}
+	</update>
+	
+	<update id="update_paySuccess" parameterType="order">
+		UPDATE tmall_order
+		SET
+		status = #{status}
+		,pay_amount1 = #{payAmount1}
+		,pay_amount1_1 = #{payAmount11}
+		,pay_amount2 = #{payAmount2}
+		,pay_amount3 = #{payAmount3}
+		,pay_datetime = #{payDatetime}
+		,pay_code = #{payCode}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE
+		code = #{code}
+	</update>
+	
+	<update id="update_confirm" parameterType="order">
+		UPDATE tmall_order
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE
+		code = #{code}
+	</update>
+	
+	<update id="update_payGroup" parameterType="order">
+		UPDATE tmall_order
+		SET
+		pay_group = #{payGroup}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_orderPay" parameterType="order">
+		UPDATE tmall_order SET
+		status=#{status}
+		,pay_code=#{payCode}
+		,pay_amount1=#{payAmount1}
+		,pay_datetime=#{payDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	
+	
+</mapper>

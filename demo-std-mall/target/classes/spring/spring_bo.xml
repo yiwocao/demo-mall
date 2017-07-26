@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	
+	<!-- 分页BO层注入paginableDao -->
+	
+	<bean id="categoryBO" class="com.xnjr.mall.bo.impl.CategoryBOImpl">
+		<property name="paginableDAO" ref="categoryDAOImpl" />
+	</bean>
+	
+	<bean id="productBO" class="com.xnjr.mall.bo.impl.ProductBOImpl">
+		<property name="paginableDAO" ref="productDAOImpl"/>
+	</bean>	
+	
+	<bean id="cartBO" class="com.xnjr.mall.bo.impl.CartBOImpl">
+		<property name="paginableDAO" ref="cartDAOImpl"/>
+	</bean>	
+	
+	<bean id="orderBO" class="com.xnjr.mall.bo.impl.OrderBOImpl">
+		<property name="paginableDAO" ref="orderDAOImpl"/>
+	</bean>	
+	
+	<bean id="productOrderBO" class="com.xnjr.mall.bo.impl.ProductOrderBOImpl">
+		<property name="paginableDAO" ref="productOrderDAOImpl"/>
+	</bean>	
+	
+	
+
+	<bean id="storeBO" class="com.xnjr.mall.bo.impl.StoreBOImpl">
+		<property name="paginableDAO" ref="storeDAOImpl"/>
+	</bean>
+	
+	<bean id="storeTicketBO" class="com.xnjr.mall.bo.impl.StoreTicketBOImpl">
+		<property name="paginableDAO" ref="storeTicketDAOImpl"/>
+	</bean>
+	
+	<bean id="userTicketBO" class="com.xnjr.mall.bo.impl.UserTicketBOImpl">
+		<property name="paginableDAO" ref="userTicketDAOImpl"/>
+	</bean>
+	
+	<bean id="storeActionBO" class="com.xnjr.mall.bo.impl.StoreActionBOImpl">
+		<property name="paginableDAO" ref="storeActionDAOImpl"/>
+	</bean>
+	<bean id="bannerBO" class="com.xnjr.mall.bo.impl.BannerBOImpl">
+		<property name="paginableDAO" ref="bannerDAOImpl" />
+	</bean>
+	
+	<bean id="storePurchaseBO" class="com.xnjr.mall.bo.impl.StorePurchaseBOImpl">
+		<property name="paginableDAO" ref="storePurchaseDAOImpl"/>
+	</bean>
+	
+	
+	<bean id="stockBO" class="com.xnjr.mall.bo.impl.StockBOImpl">
+		<property name="paginableDAO" ref="stockDAOImpl"/>
+	</bean>
+	<bean id="stockBackBO" class="com.xnjr.mall.bo.impl.StockBackBOImpl">
+		<property name="paginableDAO" ref="stockBackDAOImpl"/>
+	</bean>
+	
+	<bean id="caigopoolBO" class="com.xnjr.mall.bo.impl.CaigopoolBOImpl">
+		<property name="paginableDAO" ref="caigopoolDAOImpl"/>
+	</bean>
+	<bean id="caigopoolBackBO" class="com.xnjr.mall.bo.impl.CaigopoolBackBOImpl">
+		<property name="paginableDAO" ref="caigopoolBackDAOImpl"/>
+	</bean>
+	
+	
+	
+	
+	
+	
+	
+	<bean id="sysDictBO" class="com.xnjr.mall.bo.impl.SYSDictBOImpl">
+		<property name="paginableDAO" ref="sysDictDAOImpl"/>
+	</bean>	
+	
+	<bean id="sysConfigBO" class="com.xnjr.mall.bo.impl.SYSConfigBOImpl">
+		<property name="paginableDAO" ref="sysConfigDAOImpl"/>
+	</bean>	
+	
+</beans>

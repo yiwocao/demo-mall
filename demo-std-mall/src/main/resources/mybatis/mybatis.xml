@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>	
+	    <typeAlias alias="category" type="com.xnjr.mall.domain.Category" />
+		<typeAlias alias="product" type="com.xnjr.mall.domain.Product" />
+		<typeAlias alias="cart" type="com.xnjr.mall.domain.Cart" />
+		<typeAlias alias="order" type="com.xnjr.mall.domain.Order" />
+		<typeAlias alias="productOrder" type="com.xnjr.mall.domain.ProductOrder" />
+		<typeAlias alias="productSpecs" type="com.xnjr.mall.domain.ProductSpecs" />
+		
+	    <typeAlias alias="store" type="com.xnjr.mall.domain.Store" />
+	    <typeAlias alias="storeAction" type="com.xnjr.mall.domain.StoreAction" />
+	    <typeAlias alias="storePurchase" type="com.xnjr.mall.domain.StorePurchase" />
+	    <typeAlias alias="storeTicket" type="com.xnjr.mall.domain.StoreTicket" />
+	    <typeAlias alias="userTicket" type="com.xnjr.mall.domain.UserTicket" />
+	    <typeAlias alias="banner" type="com.xnjr.mall.domain.Banner" />
+	    
+	    <typeAlias alias="stock" type="com.xnjr.mall.domain.Stock" />
+	    <typeAlias alias="stockBack" type="com.xnjr.mall.domain.StockBack" />
+	    <typeAlias alias="caigopool" type="com.xnjr.mall.domain.Caigopool" />
+	    <typeAlias alias="caigopoolBack" type="com.xnjr.mall.domain.CaigopoolBack" />
+	    
+	    <typeAlias alias="sysDict" type="com.xnjr.mall.domain.SYSDict" />
+	    <typeAlias alias="sysConfig" type="com.xnjr.mall.domain.SYSConfig" />
+	    
+	</typeAliases>	
+</configuration>
+
+

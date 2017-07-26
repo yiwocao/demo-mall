@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnjr.mall.dao.ICaigopoolDAO">
+	<resultMap id="caigopool_DB_Result" type="caigopool">
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="type" property="type" />
+		<result column="rate" property="rate" />
+		
+		<result column="amount" property="amount" />
+		<result column="used_amount" property="usedAmount" />
+		<result column="add_user" property="addUser" />
+		<result column="add_datetime" property="addDatetime" />
+		<result column="remark" property="remark" />
+		
+		<result column="company_code" property="companyCode" />
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="name != null and name != '' ">
+				AND t.name = #{name}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			
+			<if test="addUser != null and addUser != '' ">
+				AND t.add_user = #{addUser}
+			</if>
+			
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_caigopool" parameterType="caigopool" resultMap="caigopool_DB_Result">
+		SELECT
+		t.code
+		,t.name
+		,t.type
+		,t.rate
+		
+		,t.amount
+		,t.used_amount
+		,t.add_user
+		,t.add_datetime
+		,t.remark
+		
+		,t.company_code
+		,t.system_code
+		FROM
+		tduijie_caigopool t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_caigopool_count" parameterType="caigopool"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tduijie_caigopool t
+		<include refid="where_condition" />
+	</select>
+
+	
+
+	<update id="update_addAmount" parameterType="caigopool">
+		UPDATE tduijie_caigopool
+		SET
+		amount = #{amount}
+		,add_user = #{addUser}
+		,add_datetime = #{addDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_outAmount" parameterType="caigopool">
+		UPDATE tduijie_caigopool
+		SET
+		used_Amount = #{usedAmount}
+		,amount = #{amount}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_changeRate" parameterType="caigopool">
+		UPDATE tduijie_caigopool
+		SET
+		rate = #{rate}
+		WHERE code = #{code}
+	</update>
+</mapper>

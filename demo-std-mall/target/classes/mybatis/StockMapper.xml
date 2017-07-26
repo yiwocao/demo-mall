@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnjr.mall.dao.IStockDAO">
+	<resultMap id="stock_DB_Result" type="stock">
+		<result column="code" property="code" />
+		<result column="user_id" property="userId" />
+		<result column="fund_code" property="fundCode" />
+		<result column="cost_amount" property="costAmount" />
+		<result column="cost_currency" property="costCurrency" />
+		
+		<result column="back_interval" property="backInterval" />
+		<result column="profit_amount" property="profitAmount" />
+		<result column="profit_currency" property="profitCurrency" />
+		<result column="back_count" property="backCount" />
+		<result column="back_amount" property="backAmount" />
+		
+		<result column="today_amount" property="todayAmount" />
+		<result column="next_back_date" property="nextBackDate" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="status" property="status" />
+		<result column="company_code" property="companyCode" />
+		
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="fundCode != null and fundCode != '' ">
+				AND t.fund_code = #{fundCode}
+			</if>
+			<if test="costCurrency != null and costCurrency != '' ">
+				AND t.cost_currency = #{costCurrency}
+			</if>
+			<if test="profitCurrency != null and profitCurrency != '' ">
+				AND t.profit_currency = #{profitCurrency}
+			</if>
+			<if test="nextBackDateStart != null and nextBackDateStart != '' ">
+				<![CDATA[AND t.next_back_date >= #{nextBackDateStart}]]>
+			</if>	
+			<if test="nextBackDateEnd != null and nextBackDateEnd != '' ">
+				<![CDATA[AND t.next_back_date <= #{nextBackDateEnd}]]>
+			</if>
+			<if test="noStatus != null and noStatus != '' ">
+				AND t.status != #{noStatus}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_stock" parameterType="stock" resultMap="stock_DB_Result">
+		SELECT
+		t.code
+		,t.user_id
+		,t.fund_code
+		,t.cost_amount
+		,t.cost_currency
+		
+		,t.back_interval
+		,t.profit_amount
+		,t.profit_currency
+		,t.back_count
+		,t.back_amount
+		
+		,t.today_amount
+		,t.next_back_date
+		,t.create_datetime
+		,t.status
+		,t.company_code
+		
+		,t.system_code
+		FROM
+		tfund_stock t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_stock_count" parameterType="stock"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tfund_stock t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_stock" parameterType="stock">
+		INSERT INTO
+		tfund_stock(
+		code
+		,user_id
+		,fund_code
+		,cost_amount
+		,cost_currency
+		
+		,back_interval
+		,profit_amount
+		,profit_currency
+		,back_count
+		,back_amount
+		
+		,today_amount
+		,next_back_date
+		,create_datetime
+		,status
+		,company_code
+		,system_code
+		)
+		VALUES(
+		#{code}
+		,#{userId}
+		,#{fundCode}
+		,#{costAmount}
+		,#{costCurrency}
+		
+		,#{backInterval}
+		,#{profitAmount}
+		,#{profitCurrency}
+		,#{backCount}
+		,#{backAmount}
+		
+		,#{todayAmount}
+		,#{nextBackDate}
+		,#{createDatetime}
+		,#{status}
+		,#{companyCode}
+		,#{systemCode}
+		)
+	</insert>
+
+	<update id="update_dailyStock" parameterType="stock">
+		UPDATE tfund_stock
+		SET
+		back_count = #{backCount}
+		,back_amount = #{backAmount}
+		,today_amount = #{todayAmount}
+		,next_back_date = #{nextBackDate}
+		,status = #{status}
+		WHERE code = #{code}
+	</update>
+	<update id="update_costAmount" parameterType="stock">
+		UPDATE tfund_stock
+		SET
+		cost_amount = #{costAmount}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_TOeffectStatus" parameterType="stock">
+		UPDATE tfund_stock
+		SET
+		cost_amount = #{costAmount}
+		,back_count = #{backCount}
+		,back_amount = #{backAmount}
+		,today_amount = #{todayAmount}
+		,next_back_date = #{nextBackDate}
+		,create_datetime = #{createDatetime}
+		,status = #{status}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_awakenStock" parameterType="stock">
+		UPDATE tfund_stock
+		SET
+		status = #{status}
+		WHERE code = #{code}
+	</update>
+</mapper>

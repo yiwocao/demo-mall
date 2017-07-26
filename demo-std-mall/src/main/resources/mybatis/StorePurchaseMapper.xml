@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnjr.mall.dao.IStorePurchaseDAO">
+	<resultMap id="storePurchase_DB_Result" type="storePurchase">
+		<result column="code" property="code" />
+		<result column="user_id" property="userId" />
+		<result column="store_code" property="storeCode" />
+		<result column="ticket_code" property="ticketCode" />
+		<result column="price" property="price" />
+		
+		<result column="back_amount" property="backAmount" />
+		<result column="back_currency" property="backCurrency" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="status" property="status" />
+		<result column="pay_type" property="payType" />
+		
+		<result column="pay_group" property="payGroup" />
+		<result column="pay_code" property="payCode" />
+		<result column="pay_amount1" property="payAmount1" />
+		<result column="pay_amount2" property="payAmount2" />
+		<result column="pay_amount3" property="payAmount3" />
+		<result column="pay_datetime" property="payDatetime" />
+		<result column="remark" property="remark" />
+		<result column="company_code" property="companyCode" />
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="storeCode != null and storeCode != '' ">
+				AND t.store_code = #{storeCode}
+			</if>
+			<if test="ticketCode != null and ticketCode != '' ">
+				AND t.ticket_code = #{ticketCode}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="payType != null and payType != '' ">
+				AND t.pay_type = #{payType}
+			</if>
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>
+			<if test="payCode != null and payCode != '' ">
+				AND t.pay_code = #{payCode}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_storePurchase" parameterType="storePurchase" resultMap="storePurchase_DB_Result">
+		SELECT
+		t.code
+		,t.user_id
+		,t.store_code
+		,t.ticket_code
+		,t.price
+		
+		,t.back_amount
+		,t.back_currency
+		,t.create_datetime
+		,t.status
+		,t.pay_type
+		
+		,t.pay_group
+		,t.pay_code
+		,t.pay_amount1
+		,t.pay_amount2
+		,t.pay_amount3
+		
+		,t.pay_datetime
+		,t.remark
+		,t.company_code
+		,t.system_code
+		FROM
+		to2o_purchase t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_storePurchase_count" parameterType="storePurchase"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM to2o_purchase t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_storePurchase" parameterType="storePurchase">
+		INSERT INTO
+		to2o_purchase(
+		code
+		,user_id
+		,store_code
+		,ticket_code
+		,price
+		
+		,back_amount
+		,back_currency
+		,create_datetime
+		,status
+		,pay_type
+		
+		,pay_group
+		,pay_code
+		,pay_amount1
+		,pay_amount2
+		,pay_amount3
+		
+		,pay_datetime
+		,remark
+		,company_code
+		,system_code
+		)
+		VALUES(
+		#{code}
+		,#{userId}
+		,#{storeCode}
+		,#{ticketCode}
+		,#{price}
+		
+		,#{backAmount}
+		,#{backCurrency}
+		,#{createDatetime}
+		,#{status}
+		,#{payType}
+		
+		,#{payGroup}
+		,#{payCode}
+		,#{payAmount1}
+		,#{payAmount2}
+		,#{payAmount3}
+		
+		,#{payDatetime}
+		,#{remark}
+		,#{companyCode}
+		,#{systemCode}
+		)
+	</insert>
+
+	<update id="update_storePurchase" parameterType="storePurchase">
+		UPDATE to2o_purchase
+		SET
+		user_id = #{userId}
+		,amount = #{amount}
+		,back_amount = #{backAmount}
+		,create_datetime = #{createDatetime}
+		,remark = #{remark}
+		,store_code = #{storeCode}
+		,system_code = #{systemCode}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_status" parameterType="storePurchase">
+		UPDATE to2o_purchase
+		SET
+		status = #{status}
+		,pay_datetime = #{payDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_paySuccess" parameterType="storePurchase">
+		UPDATE to2o_purchase
+		SET
+		status = #{status}
+		,pay_code = #{payCode}
+		,pay_amount1 = #{payAmount1}
+		,pay_datetime = #{payDatetime}
+		WHERE code = #{code}
+	</update>
+</mapper>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnjr.mall.dao.ICartDAO">
+	<resultMap id="cart_DB_Result" type="cart">
+		<result column="code" property="code" />
+		<result column="user_id" property="userId" />
+		<result column="product_code" property="productCode" />
+		<result column="quantity" property="quantity" />
+		<result column="company_code" property="companyCode" />
+		<result column="system_code" property="systemCode" />
+		
+		<result column="product_code" property="product.code" />
+		<result column="product_name" property="product.name" />
+		<result column="product_adv_pic" property="product.advPic" />
+		<result column="product_price1" property="product.price1" />
+		<result column="product_price2" property="product.price2" />
+		<result column="product_price3" property="product.price3" />
+		<result column="product_company_code" property="product.companyCode" />
+		<result column="product_system_code" property="product.systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND t.product_code = #{productCode}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_cart" parameterType="cart" resultMap="cart_DB_Result">
+		SELECT
+		t.code
+		,t.user_id
+		,t.product_code
+		,t.quantity
+		,t.company_code
+		,t.system_code
+		
+		,tp.code product_code
+		,tp.name product_name
+		,tp.adv_pic product_adv_pic
+		,tp.price1 product_price1
+		,tp.price2 product_price2
+		,tp.price3 product_price3
+		,tp.company_code product_company_code
+		,tp.system_code product_system_code
+		FROM
+		tmall_cart t INNER JOIN tmall_product tp ON t.product_code = tp.code
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_cart_count" parameterType="cart"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tmall_cart t INNER JOIN tmall_product tp ON t.product_code = tp.code
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_cart" parameterType="cart">
+		INSERT INTO
+		tmall_cart(
+		code
+		,user_id
+		,product_code
+		,quantity
+		,company_code
+		,system_code
+		)
+		VALUES(
+		#{code}
+		,#{userId}
+		,#{productCode}
+		,#{quantity}
+		,#{companyCode}
+		,#{systemCode}
+		)
+	</insert>
+	
+	<update id="update_cart" parameterType="cart">
+		UPDATE tmall_cart
+		SET
+		quantity = #{quantity}
+		WHERE code = #{code}
+	</update>
+	
+	<delete id="delete_cart" parameterType="cart">
+		DELETE FROM
+		tmall_cart
+		WHERE
+		code = #{code}
+	</delete>
+</mapper>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.account.dao.IBalanceDAO">
+	<resultMap id="bankcard_DB_Result" type="balance">
+		<result column="code" property="code" />
+		<result column="account_number" property="accountNumber" />
+		<result column="user_id" property="userId" />
+		<result column="biz_type" property="biz_note" />
+		<result column="trans_amount" property="transAmount" />
+		<result column="amount" property="amount" />		
+		<result column="create_time" property="createTime" />		
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="accountNumber != null and accountNumber != '' ">
+				AND t.account_number = #{accountNumber}
+			</if>
+			
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+
+	<insert id="insert_balance" parameterType="balance">
+		INSERT INTO
+		tstd_balance(
+		code
+		,account_number
+		,user_id
+		,biz_type
+		,biz_note
+		,trans_amount
+		,amount
+		,create_time
+		,system_code
+		)
+		VALUES(
+		#{code}
+		,#{accountNumber}
+		,#{userId}
+		,#{bizType}
+		,#{bizNote}
+		,#{trans_amount}
+		,#{amount}	
+		,#{createTime}
+		,#{systemCode}
+		)
+	</insert>
+
+	
+
+</mapper>
