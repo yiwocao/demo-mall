@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.user.dao.IInvitationDAO">
+	<resultMap type="invitation" id="invitation_DB_Result">
+			<result column="code" property="code" />
+			<result column="inv_code" property="invCode" />
+			<result column="status" property="status" />		
+			<result column="create_datetime" property="createDatetime" />		
+			<result column="use_datetime" property="useDatetime" />
+			
+			<result column="user_id" property="userId" />		
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">	
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>	
+			<if test="invCode != null and invCode != '' ">
+				AND t.inv_code = #{invCode}
+			</if>			
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>	
+			<if test="createDatetime != null and createDatetime != '' ">
+				AND t.create_datetime = #{createDatetime}
+			</if>	
+			<if test="useDatetime != null and useDatetime != '' ">
+				AND t.use_datetime = #{useDatetime}
+			</if>			
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>	
+		</trim>
+	</sql>
+	<select id="select_invitation" parameterType="invitation" resultMap="invitation_DB_Result">
+		SELECT
+		t.code
+		,inv_code
+		,status
+		,create_datetime
+		,use_datetime
+		,user_id	
+		FROM
+		tstd_invitation t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_invitation_count" parameterType="invitation"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_invitation t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_invitation" parameterType="invitation">
+		INSERT INTO
+		tstd_invitation(
+		code
+		,inv_code
+		,status
+		,create_datetime
+		,use_datetime
+		
+		,user_id	
+		)
+		VALUES(
+		#{code}
+		,#{invCode}
+		,#{status}
+		,#{createDatetime}
+		,#{useDatetime}
+		
+		,#{userId}
+		)
+	</insert>
+
+	<update id="update_invitation" parameterType="invitation">
+		UPDATE tstd_invitation
+		SET
+		status=#{status}
+		,user_id=#{userId}
+		,use_datetime=#{useDatetime}
+		WHERE inv_code = #{invCode}
+	</update>
+
+	<update id="update_invitationStatus" parameterType="invitation">
+		UPDATE tstd_invitation
+		SET
+		status=#{status}
+		WHERE code = #{code}
+	</update>
+	
+	<delete id="delete_invitation" parameterType="invitation">
+		DELETE FROM
+		tstd_invitation
+		WHERE
+		code = #{code}
+	</delete>
+
+	
+</mapper>

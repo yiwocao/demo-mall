@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.user.dao.ICMaterialDAO">
+	<resultMap id="cMaterial_DB_Result" type="cMaterial">
+		<result column="code" property="code" />
+		<result column="kind" property="kind" />
+		<result column="type" property="type" />
+		<result column="title" property="title" />
+		<result column="pic1" property="pic1" />
+		<result column="pic2" property="pic2" />
+		<result column="url" property="url" />
+		<result column="description" property="description" />
+		<result column="end_note" property="endNote" />
+		<result column="remark" property="remark" />
+		<result column="create_time" property="createTime" />
+		<result column="menu_code" property="menuCode" />
+		<result column="company_code" property="companyCode" />
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="title != null and title != '' ">
+				AND t.title like "%"#{title}"%"
+			</if>
+			<if test="kind != null and kind != '' ">
+				AND t.kind = #{kind}
+			</if>
+			<if test="menuCode != null and menuCode != '' ">
+				AND t.menu_code = #{menuCode}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_cMaterial" parameterType="cMaterial" resultMap="cMaterial_DB_Result">
+		SELECT
+		t.code
+		,t.kind
+		,t.type
+		,t.title
+		,t.pic1
+		,t.pic2
+		,t.url
+		,t.description
+		,t.end_note
+		,t.remark
+		,t.create_time
+		,t.menu_code
+		,t.company_code
+		,t.system_code
+		FROM
+		tstd_cmaterial t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_cMaterial_count" parameterType="cMaterial"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_cmaterial t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_cMaterial" parameterType="cMaterial">
+		INSERT INTO
+		tstd_cmaterial(
+		code
+		,kind
+		,type
+		,title
+		,pic1
+		,pic2
+		,url
+		,description
+		,end_note
+		,remark
+		,create_time
+		,menu_code
+		,company_code
+		,system_code	
+		)
+		VALUES(
+		#{code}
+		,#{kind}
+		,#{type}
+		,#{title}
+		,#{pic1}
+		,#{pic2}
+		,#{url}
+		,#{description}
+		,#{endNote}
+		,#{remark}
+		,#{createTime}
+		,#{menuCode}
+		,#{companyCode}
+		,#{systemCode}
+		)
+	</insert>
+
+	<update id="update_cMaterial" parameterType="cMaterial">
+		UPDATE tstd_cmaterial
+		SET
+		kind = #{kind}
+		,type = #{type}
+		,title = #{title}
+		,pic1 = #{pic1}
+		,pic2 = #{pic2}
+		,url = #{url}
+		,description = #{description}
+		,end_note = #{endNote}
+		,remark = #{remark}
+		,create_time = #{createTime}
+		,menu_code = #{menuCode}
+		WHERE code = #{code}
+	</update>
+	
+	<delete id="delete_cMaterial" parameterType="cMaterial" >
+		DELETE FROM
+		tstd_cmaterial
+		WHERE 
+		code = #{code}
+	</delete>
+
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.user.dao.IUReadDAO">
+	<resultMap id="uRead_DB_Result" type="uRead">
+		<result column="id" property="id" />
+		<result column="sms_code" property="smsCode" />
+		<result column="user_id" property="userId" />
+		<result column="status" property="status" />
+		<result column="read_datetime" property="readDatetime" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="id != null and id != '' ">
+				AND t.id = #{id}
+			</if>
+			<if test="smsCode != null and smsCode != '' ">
+				AND t.sms_code = #{smsCode}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="readDatetimeStart != null and readDatetimeStart != '' ">
+				<![CDATA[AND t.read_datetime >= #{readDatetimeStart}]]>
+			</if>
+			<if test="readDatetimeEnd != null and readDatetimeEnd != '' ">
+				<![CDATA[AND t.read_datetime <= #{readDatetimeEnd}]]>
+			</if>
+		</trim>
+	</sql>
+	<select id="select_uRead" parameterType="uRead" resultMap="uRead_DB_Result">
+		SELECT
+		t.id
+		,t.sms_code
+		,t.user_id
+		,t.status
+		,t.read_datetime
+		FROM
+		tstd_uread t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_uRead_count" parameterType="uRead"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_uread t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_uRead" parameterType="uRead" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		tstd_uread(
+		id
+		,sms_code
+		,user_id
+		,status
+		,read_datetime
+		)
+		VALUES(
+		#{id}
+		,#{smsCode}
+		,#{userId}
+		,#{status}
+		,#{readDatetime}
+		)
+	</insert>
+
+	<update id="update_uRead" parameterType="uRead">
+		UPDATE tstd_uread
+		SET
+		status = #{status}
+		,read_datetime = #{readDatetime}
+		WHERE sms_code = #{smsCode} AND user_id = #{userId}
+	</update>
+	
+	<update id="update_uRead_status" parameterType="uRead">
+		UPDATE tstd_uread
+		SET
+		status = #{status}
+		WHERE sms_code = #{smsCode} AND user_id = #{userId}
+	</update>
+</mapper>

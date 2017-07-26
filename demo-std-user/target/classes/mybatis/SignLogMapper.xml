@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.user.dao.ISignLogDAO">
+	<resultMap id="signLog_DB_Result" type="signLog">
+		<result column="code" property="code" />
+		<result column="user_id" property="userId" />
+		<result column="location" property="location" />
+		<result column="sign_datetime" property="signDatetime" />
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="signDatetimeStart != null and signDatetimeStart != '' ">
+				<![CDATA[AND t.sign_datetime >= #{signDatetimeStart}]]>
+			</if>
+			<if test="signDatetimeEnd != null and signDatetimeEnd != '' ">
+				<![CDATA[AND t.sign_datetime <= #{signDatetimeEnd}]]>
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_signLog" parameterType="signLog" resultMap="signLog_DB_Result">
+		SELECT
+		code
+		,user_id
+		,location
+		,sign_datetime
+		,system_code
+		FROM
+		tstd_sign_log t
+		<include refid="where_condition" />
+		ORDER BY t.code DESC	
+	</select>
+
+	<select id="select_signLog_count" parameterType="signLog"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_sign_log t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_signLog" parameterType="signLog">
+		INSERT INTO
+		tstd_sign_log(
+		code
+		,user_id
+		,location
+		,sign_datetime
+		,system_code
+		)
+		VALUES(
+		#{code}
+		,#{userId}
+		,#{location}
+		,#{signDatetime}
+		,#{systemCode}
+		)
+	</insert>
+</mapper>

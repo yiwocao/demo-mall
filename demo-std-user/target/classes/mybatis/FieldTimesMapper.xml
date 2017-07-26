@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.user.dao.IFieldTimesDAO">
+	<resultMap id="fieldTimes_DB_Result" type="fieldTimes">
+		<result column="id" property="id" />
+		<result column="type" property="type" />
+		<result column="user_id" property="userId" />
+		<result column="times" property="times" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_fieldTimes" parameterType="fieldTimes" resultMap="fieldTimes_DB_Result">
+		SELECT
+		t.id
+		,t.type
+		,t.user_id
+		,t.times
+		FROM
+		tstd_field_times t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_fieldTimes_count" parameterType="fieldTimes"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_field_times t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_fieldTimes" parameterType="fieldTimes">
+		INSERT INTO
+		tstd_field_times(
+		type
+		,user_id
+		,times
+		)
+		VALUES(
+		#{type}
+		,#{userId}
+		,#{times}
+		)
+	</insert>
+</mapper>

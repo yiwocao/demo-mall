@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.user.dao.IUserDAO">
+	<resultMap id="user_DB_Result" type="user">
+		<result column="user_id" property="userId" />
+		<result column="login_name" property="loginName" />
+		<result column="nickname" property="nickname" />
+		<result column="login_pwd_strength" property="loginPwdStrength" />		
+		<result column="kind" property="kind" />
+		
+		<result column="level" property="level" />		
+		<result column="user_referee" property="userReferee" />
+		<result column="mobile" property="mobile" />
+		<result column="id_kind" property="idKind" />
+		<result column="id_no" property="idNo" />
+		
+		<result column="real_name" property="realName" />
+		<result column="trade_pwd_strength" property="tradePwdStrength" />
+		<result column="role_code" property="roleCode" />
+		<result column="div_rate" property="divRate" />
+		<result column="status" property="status" />
+		<result column="create_datetime" property="createDatetime" />
+		
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+		<result column="pdf" property="pdf" />
+		<result column="company_code" property="companyCode" />
+		
+		<result column="company_name" property="companyName" />
+		<result column="open_id" property="openId" />
+		<result column="union_id" property="unionId" />
+		<result column="jpush_id" property="jpushId" />
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">			
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="loginName != null and loginName != '' ">
+				<choose>
+					<when test='loginType == "3"'>
+						AND (t.login_name = #{loginName} OR t.mobile = #{loginName})
+					</when>
+					<when test='loginType == "2"'>
+						AND t.mobile = #{loginName}
+					</when>
+				    <otherwise>
+						AND t.login_name = #{loginName}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="loginNameForLikeQuery != null and loginNameForLikeQuery != '' ">
+				AND t.login_name like "%"#{loginNameForLikeQuery}"%"
+			</if>
+			<if test="nickname != null and nickname != '' ">
+				AND t.nickname = #{nickname}
+			</if>
+			<if test="nicknameForLikeQuery != null and nicknameForLikeQuery != '' ">
+				AND t.nickname like "%"#{nicknameForLikeQuery}"%"
+			</if>
+			<choose>
+				 <when test="kind == '07'">
+				  AND (t.kind = 05 or t.kind = 02)
+				 </when>
+				 <when test="kind == 'ff3'">
+				  AND (t.kind = 'f1' or t.kind = 'f2')
+				 </when>
+				 <when test="kind != null and kind != '' ">
+				  AND t.kind = #{kind}
+				 </when>
+				 <otherwise>
+				  AND 1 = 1
+				 </otherwise>
+			</choose>	
+			<if test="level != null and level != '' ">
+				AND t.level = #{level}
+			</if>	
+			<if test="userReferee != null and userReferee != '' ">
+				AND t.user_referee = #{userReferee}
+			</if>	
+			<if test="mobile != null and mobile != '' ">
+				AND t.mobile = #{mobile}
+			</if>
+			<if test="mobileForLikeQuery != null and mobileForLikeQuery != '' ">
+				AND t.mobile like "%"#{mobileForLikeQuery}"%"
+			</if>
+			<if test="idKind != null and idKind != '' ">
+				AND t.id_kind = #{idKind}
+			</if>
+			<if test="idNo != null and idNo != '' ">
+				AND t.id_no = #{idNo}
+			</if>
+			<if test="realName != null and realName != '' ">
+				AND t.real_name = #{realName}
+			</if>
+			<if test="realNameForLikeQuery != null and realNameForLikeQuery != '' ">
+				AND t.real_name like "%"#{realNameForLikeQuery}"%"
+			</if>
+			<if test="roleCode != null and roleCode != '' ">
+				AND t.role_code = #{roleCode}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="updater != null and updater != '' ">
+				AND t.updater = #{updater}
+			</if>
+			<if test="loginPwd != null and loginPwd != '' ">
+				AND t.login_pwd = #{loginPwd}
+			</if>	
+			<if test="tradePwd != null and tradePwd != '' ">
+				AND t.trade_pwd = #{tradePwd}
+			</if>	
+			<if test="openId != null and openId != '' ">
+				AND t.open_id = #{openId}
+			</if>
+			<if test="unionId != null and unionId != '' ">
+				AND t.union_id = #{unionId}
+			</if>
+			<if test="jpushId != null and jpushId != '' ">
+				AND t.jpush_id = #{jpushId}
+			</if>
+			<if test="createBeginDatetime != null and createBeginDatetime != '' ">
+				<![CDATA[AND t.create_datetime >= #{createBeginDatetime}]]>
+			</if>
+			<if test="createEndDatetime != null and createEndDatetime != '' ">
+				<![CDATA[AND t.create_datetime <= #{createEndDatetime}]]>
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_user" parameterType="user" resultMap="user_DB_Result">
+		SELECT 
+		t.user_id
+		,t.login_name
+		,t.nickname
+		,t.login_pwd_strength
+		,t.kind	
+		
+		,t.level
+		,t.user_referee
+		,t.mobile
+		,t.id_kind
+		,t.id_no
+		
+		,t.real_name
+		,t.trade_pwd_strength
+		,t.role_code
+		,t.div_rate
+		,t.status
+		
+		,t.create_datetime
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		,t.pdf
+		
+		,t.company_code
+		,tc.name as company_name
+		,t.open_id
+		,t.union_id
+		,t.jpush_id
+		,t.system_code
+		FROM
+		tstd_user t left join tstd_company tc on t.company_code = tc.code
+		<include refid="where_condition"/>
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_user_count" parameterType="user" resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_user t left join tstd_company tc on t.company_code = tc.code
+		<include refid="where_condition"/>
+	</select>
+	
+	<select id="select_user_id" parameterType="user" resultType="java.lang.String">
+		select user_id from tstd_user t
+		<include refid="where_condition"/>
+	</select>
+
+	<insert id="insert_user" parameterType="user">
+		INSERT INTO tstd_user(
+		user_id
+		,login_name
+		,nickname
+		,login_pwd
+		,login_pwd_strength
+		
+		,trade_pwd
+		,trade_pwd_strength
+		,kind
+		,level
+		,user_referee
+		
+		,mobile
+		,status
+		,create_datetime
+		,updater
+		,update_datetime
+		
+		,remark
+		,company_code
+		,open_id
+		,union_id
+		,jpush_id
+		,system_code
+		)
+		VALUES(
+		#{userId}
+		,#{loginName}
+		,#{nickname}
+		,#{loginPwd}
+		,#{loginPwdStrength}
+		
+		,#{tradePwd}
+		,#{tradePwdStrength}
+		,#{kind}
+		,#{level}
+		,#{userReferee}
+		
+		,#{mobile}
+		,#{status}
+		,#{createDatetime}
+		,#{updater}
+		,#{updateDatetime}
+		
+		,#{remark}
+		,#{companyCode}
+		,#{openId}
+		,#{unionId}
+		,#{jpushId}
+		,#{systemCode}
+		)
+	</insert>
+	
+    <insert id="insert_ren" parameterType="user">
+		INSERT INTO tstd_user(
+		user_id
+		,nickname
+		,login_name
+		,login_pwd
+		,login_pwd_strength
+		
+		,kind
+		,level
+		,user_referee
+		,mobile
+		,id_kind
+		
+		,id_no
+		,real_name
+		,trade_pwd
+		,trade_pwd_strength
+		,role_code
+		
+		,div_rate
+		,status
+		,create_datetime
+		,updater
+		,update_datetime
+		
+		,remark
+		,pdf
+		,company_code
+		,system_code
+		)
+		VALUES(
+		#{userId}
+		,#{nickname}
+		,#{loginName}
+		,#{loginPwd}
+		,#{loginPwdStrength}
+		
+		,#{kind}
+		,#{level}
+		,#{userReferee}
+		,#{mobile}
+		,#{idKind}
+		
+		,#{idNo}
+		,#{realName}
+		,#{tradePwd}
+		,#{tradePwdStrength}
+		,#{roleCode}
+		
+		,#{divRate}
+		,#{status}
+		,#{createDatetime}
+		,#{updater}
+		,#{updateDatetime}
+		
+		,#{remark}
+		,#{pdf}
+		,#{companyCode}
+		,#{systemCode}
+		)
+	</insert>
+	
+	<update id="update_identity" parameterType="user">
+		UPDATE tstd_user
+		SET
+		 real_name= #{realName}
+		,id_kind = #{idKind}
+		,id_no = #{idNo}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_real_name" parameterType="user">
+		UPDATE tstd_user
+		SET
+		real_name= #{realName}
+		WHERE
+		user_id = #{userId}
+	</update>
+	
+	<update id="update_trade_pwd" parameterType="user">
+		UPDATE tstd_user
+		SET
+		 trade_pwd = #{tradePwd}
+		,trade_pwd_strength = #{tradePwdStrength}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_login_pwd" parameterType="user">
+		UPDATE tstd_user
+		SET
+		 login_pwd = #{loginPwd}
+		,login_pwd_strength = #{loginPwdStrength}
+		WHERE
+		user_id = #{userId}	
+	</update>	
+	
+	<update id="update_mobile" parameterType="user">
+		UPDATE tstd_user
+		SET
+		login_name = #{mobile}
+		,mobile = #{mobile}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_bind_mobile" parameterType="user">
+		UPDATE tstd_user
+		SET
+		login_name = #{loginName}
+		,mobile = #{mobile}
+		,login_pwd = #{loginPwd}
+		,login_pwd_strength = #{loginPwdStrength}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_status" parameterType="user">
+		UPDATE tstd_user
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_role" parameterType="user">
+		UPDATE tstd_user
+		SET
+		role_code = #{roleCode}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_user_pdf" parameterType="user">
+		UPDATE tstd_user
+		SET
+		 pdf = #{pdf}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_user_loginName" parameterType="user">
+		UPDATE tstd_user
+		SET
+		 login_name = #{loginName}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_user_nickname" parameterType="user">
+		UPDATE tstd_user
+		SET
+		 nickname = #{nickname}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_user" parameterType="user">
+		UPDATE tstd_user
+		SET
+		login_name = #{loginName}
+		,mobile = #{mobile}
+		,id_kind = #{idKind}
+		,id_no = #{idNo}
+		,real_name = #{realName}
+		
+		,div_rate = #{divRate}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_user_supple" parameterType="user">
+		UPDATE tstd_user
+		SET
+		mobile= #{mobile}
+		,real_name= #{realName}
+		,id_kind = #{idKind}
+		,id_no = #{idNo}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_user_company" parameterType="user">
+		UPDATE tstd_user
+		SET
+		company_code = #{companyCode}
+		WHERE
+		user_id = #{userId}		
+	</update>
+	
+	<update id="update_level" parameterType="user">
+		UPDATE tstd_user
+		SET
+		level = #{level}
+		WHERE
+		user_id = #{userId}		
+	</update>
+	
+	<update id="update_wx_info" parameterType="user">
+		UPDATE tstd_user
+		SET
+		open_id = #{openId}
+		,union_id = #{unionId}
+		,nickname = #{nickname}
+		WHERE
+		user_id = #{userId}		
+	</update>
+	
+	<update id="update_wx_openId" parameterType="user">
+		UPDATE tstd_user
+		SET
+		open_id = #{openId}
+		,union_id = #{unionId}
+		WHERE
+		user_id = #{userId}		
+	</update>
+</mapper>

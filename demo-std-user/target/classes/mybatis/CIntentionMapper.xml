@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.user.dao.ICIntentionDAO">
+	<resultMap id="cIntention_DB_Result" type="cIntention">
+		<result column="code" property="code" />
+		<result column="from_company" property="fromCompany" />
+		<result column="from_person" property="fromPerson" />
+		<result column="from_contact" property="fromContact" />
+		<result column="content" property="content" />
+		<result column="status" property="status" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+		<result column="company_code" property="companyCode" />
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="fromCompany != null and fromCompany != '' ">
+				AND t.from_company = #{fromCompany}
+			</if>
+			<if test="fromPerson != null and fromPerson != '' ">
+				AND t.from_person = #{fromPerson}
+			</if>
+			<if test="fromContact != null and fromContact != '' ">
+				AND t.from_contact = #{fromContact}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_cIntention" parameterType="cIntention" resultMap="cIntention_DB_Result">
+		SELECT
+		t.code
+		,t.from_company
+		,t.from_person
+		,t.from_contact
+		,t.content
+		,t.status
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		,t.company_code
+		,t.system_code
+		FROM
+		tstd_cintention t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_cIntention_count" parameterType="cIntention"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_cintention t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_cIntention" parameterType="cIntention">
+		INSERT INTO
+		tstd_cintention(
+		code
+		,from_company
+		,from_person
+		,from_contact
+		,content
+		,status
+		,updater
+		,update_datetime
+		,remark
+		,company_code
+		,system_code
+		)
+		VALUES(
+		#{code}
+		,#{fromCompany}
+		,#{fromPerson}
+		,#{fromContact}
+		,#{content}
+		,#{status}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		,#{companyCode}
+		,#{systemCode}
+		)
+	</insert>
+
+	<update id="update_cIntention" parameterType="cIntention">
+		UPDATE tstd_cintention
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+</mapper>
