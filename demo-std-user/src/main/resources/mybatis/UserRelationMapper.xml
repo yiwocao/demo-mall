@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.user.dao.IUserRelationDAO">
+	<resultMap id="user_DB_Result" type="user">
+		<result column="user_id" property="userId" />
+		<result column="login_name" property="loginName" />
+		<result column="nickname" property="nickname" />
+		<result column="photo" property="photo" />
+		<result column="kind" property="kind" />
+		
+		<result column="level" property="level" />		
+		<result column="user_referee" property="userReferee" />
+		<result column="mobile" property="mobile" />
+		<result column="id_kind" property="idKind" />
+		<result column="id_no" property="idNo" />
+		
+		<result column="real_name" property="realName" />
+		<result column="status" property="status" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+		
+		<result column="pdf" property="pdf" />
+	</resultMap>
+	
+	<resultMap id="userRelation_DB_Result" type="userRelation">
+		<result column="code" property="code" />
+		<result column="user_id" property="userId" />
+		<result column="to_user" property="toUser" />
+		<result column="status" property="status" />
+		<result column="update_datetime" property="updateDatetime" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="toUser != null and toUser != '' ">
+				AND t.to_user = #{toUser}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	
+	<sql id="where_user_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId} AND t.to_user = tu.user_id
+			</if>
+			<if test="toUser != null and toUser != '' ">
+				AND t.to_user = #{toUser} AND t.user_id = tu.user_id
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="mobileForLikeQuery != null and mobileForLikeQuery != '' ">
+				AND tu.mobile like "%"#{mobileForLikeQuery}"%"
+			</if>
+			<if test="nickname != null and nickname != '' ">
+				AND tu.nickname like "%"#{nickname}"%"
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_userRelation" parameterType="userRelation" resultMap="userRelation_DB_Result">
+		SELECT 
+		t.code
+		,t.user_id
+		,t.to_user
+		,t.status
+		,t.update_datetime
+		,t.system_code
+		FROM
+		tstd_user_relation t
+		<include refid="where_condition" />
+		ORDER BY t.code DESC
+	</select>
+
+	<select id="select_userRelation_count" parameterType="userRelation"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_user_relation t
+		<include refid="where_condition" />
+	</select>
+	
+	<select id="select_user" parameterType="userRelation" resultMap="user_DB_Result">
+		SELECT 
+		tu.user_id
+		,tu.login_name
+		,tu.nickname
+		,(select photo from tstd_user_ext tue where tue.user_id=tu.user_id) as photo
+		,tu.kind	
+		,tu.level
+		,tu.user_referee
+		
+		,tu.mobile
+		,tu.id_kind
+		,tu.id_no
+		,tu.real_name
+		,tu.status
+		
+		,tu.pdf
+		,tu.updater
+		,tu.update_datetime
+		,tu.remark
+		,tu.system_code
+		FROM
+		tstd_user tu,tstd_user_relation t 
+		<include refid="where_user_condition" />
+		ORDER BY tu.user_id DESC	
+	</select>
+
+	<select id="select_user_count" parameterType="userRelation"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_user tu,tstd_user_relation t 
+		<include refid="where_user_condition" />
+	</select>
+	
+	<insert id="insert_userRelation" parameterType="userRelation">
+		INSERT INTO
+		tstd_user_relation(
+		code
+		,user_id
+		,to_user
+		,status
+		,update_datetime
+		,system_code
+		)
+		VALUES(
+		#{code}
+		,#{userId}
+		,#{toUser}
+		,#{status}
+		,#{updateDatetime}
+		,#{systemCode}
+		)
+	</insert>
+	
+	<delete id="delete_userRelation" parameterType="userRelation">
+		DELETE FROM
+		tstd_user_relation
+		WHERE user_id = #{userId} AND to_user = #{toUser}
+	</delete>
+	
+	<update id="update_userRelationStatus" parameterType="userRelation">
+		UPDATE tstd_user_relation
+		SET
+		status= #{status}
+		,update_datetime= #{updateDatetime}
+		WHERE user_id = #{userId} AND to_user = #{toUser}
+	</update>
+	
+</mapper>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	
+	<!-- 分页BO层注入paginableDao -->
+	<bean id="userBO" class="com.std.user.bo.impl.UserBOImpl">
+		<property name="paginableDAO" ref="userDAOImpl" />
+	</bean>
+	<bean id="userRelationBO" class="com.std.user.bo.impl.UserRelationBOImpl">
+		<property name="paginableDAO" ref="userRelationDAOImpl" />
+	</bean>
+	<bean id="addressBO" class="com.std.user.bo.impl.AddressBOImpl">
+		<property name="paginableDAO" ref="addressDAOImpl"/>
+	</bean>	
+	<bean id="sysMenuBO" class="com.std.user.bo.impl.SYSMenuBOImpl">
+		<property name="paginableDAO" ref="sysMenuDAOImpl"/>
+	</bean>
+	
+	<bean id="sysRoleBO" class="com.std.user.bo.impl.SYSRoleBOImpl">
+		<property name="paginableDAO" ref="sysRoleDAOImpl"/>
+	</bean>
+	<bean id="sysMenuRoleBO" class="com.std.user.bo.impl.SYSMenuRoleBOImpl">
+		<property name="paginableDAO" ref="sysMenuRoleDAOImpl"/>
+	</bean>
+	<bean id="signLogBO" class="com.std.user.bo.impl.SignLogBOImpl">
+		<property name="paginableDAO" ref="signLogDAOImpl"/>
+	</bean>
+	<bean id="companyBO" class="com.std.user.bo.impl.CompanyBOImpl">
+		<property name="paginableDAO" ref="companyDAOImpl"/>
+	</bean>
+	<bean id="levelRuleBO" class="com.std.user.bo.impl.LevelRuleBOImpl">
+		<property name="paginableDAO" ref="levelRuleDAOImpl"/>
+	</bean>
+	
+	<bean id="cMaterialBO" class="com.std.user.bo.impl.CMaterialBOImpl">
+		<property name="paginableDAO" ref="cMaterialDAOImpl"/>
+	</bean>
+	<bean id="cNavigateBO" class="com.std.user.bo.impl.CNavigateBOImpl">
+		<property name="paginableDAO" ref="cNavigateDAOImpl"/>
+	</bean>
+	<bean id="cIntentionBO" class="com.std.user.bo.impl.CIntentionBOImpl">
+		<property name="paginableDAO" ref="cIntentionDAOImpl"/>
+	</bean>
+	<bean id="cPasswordBO" class="com.std.user.bo.impl.CPasswordBOImpl">
+		<property name="paginableDAO" ref="cPasswordDAOImpl"/>
+	</bean>
+	
+	<bean id="b2cSmsBO" class="com.std.user.bo.impl.B2cSmsBOImpl">
+		<property name="paginableDAO" ref="b2cSmsDAOImpl"/>
+	</bean>
+	
+	<bean id="uReadBO" class="com.std.user.bo.impl.UReadBOImpl">
+		<property name="paginableDAO" ref="uReadDAOImpl"/>
+	</bean>
+	<bean id="certificateBO" class="com.std.user.bo.impl.CertificateBOImpl">
+		<property name="paginableDAO" ref="certificateDAOImpl"/>
+	</bean>
+	<bean id="companyCertificateBO" class="com.std.user.bo.impl.CompanyCertificateBOImpl">
+		<property name="paginableDAO" ref="companyCertificateDAOImpl"/>
+	</bean>
+	
+	<bean id="sysDictBO" class="com.std.user.bo.impl.SYSDictBOImpl">
+		<property name="paginableDAO" ref="sysDictDAOImpl"/>
+	</bean>	
+	<bean id="sysConfigBO" class="com.std.user.bo.impl.SYSConfigBOImpl">
+		<property name="paginableDAO" ref="sysConfigDAOImpl"/>
+	</bean>	
+	<bean id="ruleBO" class="com.std.user.bo.impl.RuleBOImpl">
+		<property name="paginableDAO" ref="ruleDAOImpl"/>
+	</bean>	
+	
+	<bean id="couponBO" class="com.std.user.bo.impl.CouponBOImpl">
+		<property name="paginableDAO" ref="couponDAOImpl"/>
+	</bean>	
+	
+	<bean id="invitationBO" class="com.std.user.bo.impl.InvitationBOImpl">
+		<property name="paginableDAO" ref="invitationDAOImpl"/>
+	</bean>	
+		
+	<bean id="blacklistBO" class="com.std.user.bo.impl.BlacklistBOImpl">
+		<property name="paginableDAO" ref="blacklistDAOImpl"/>
+	</bean>	
+</beans>

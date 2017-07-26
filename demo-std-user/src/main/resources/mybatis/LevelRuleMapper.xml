@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.user.dao.ILevelRuleDAO">
+	<resultMap id="levelRule_DB_Result" type="levelRule">
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="amount_min" property="amountMin" />
+		<result column="amount_max" property="amountMax" />
+		<result column="effect" property="effect" />
+		
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="name != null and name != '' ">
+				AND t.name = #{name}
+			</if>
+			<if test="effect != null and effect != '' ">
+				AND t.effect = #{effect}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_levelRule" parameterType="levelRule" resultMap="levelRule_DB_Result">
+		SELECT
+		t.code
+		,t.name
+		,t.amount_min
+		,t.amount_max
+		,t.effect
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		,t.system_code
+		FROM
+		tstd_level_rule t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_levelRule_count" parameterType="levelRule"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_level_rule t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_levelRule" parameterType="levelRule">
+		INSERT INTO
+		tstd_level_rule(
+		code
+		,name
+		,amount_min
+		,amount_max
+		,effect
+		,updater
+		,update_datetime
+		,remark
+		,system_code
+		)
+		VALUES(
+		#{code}
+		,#{name}
+		,#{amountMin}
+		,#{amountMax}
+		,#{effect}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		,#{systemCode}
+		)
+	</insert>
+
+	<update id="update_levelRule" parameterType="levelRule">
+		UPDATE tstd_level_rule
+		SET
+		name = #{name}
+		,amount_min = #{amountMin}
+		,amount_max = #{amountMax}
+		,effect = #{effect}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+	<delete id="delete_levelRule" parameterType="levelRule">
+		DELETE FROM
+		tstd_level_rule
+		WHERE
+		code = #{code}
+	</delete>
+</mapper>

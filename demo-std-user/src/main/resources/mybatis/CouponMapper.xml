@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.std.user.dao.ICouponDAO">
+	<resultMap id="coupon_DB_Result" type="coupon">
+		<result column="code" property="code" />
+		<result column="amount" property="amount" />
+		<result column="cny_price" property="cnyPrice" />
+		<result column="use_times" property="useTimes" />
+		<result column="style" property="style" />
+		<result column="status" property="status" />
+		<result column="creator" property="creator" />
+		<result column="creator_name" property="creatorName" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="scanner" property="scanner" />
+		<result column="scanner_mobile" property="scannerMobile" />
+		<result column="scan_datetime" property="scanDatetime" />
+		<result column="company_code" property="companyCode" />
+		<result column="domain" property="domain" />
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="style != null and style != '' ">
+				AND t.style = #{style}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="scanner != null and scanner != '' ">
+				AND t.scanner = #{scanner}
+			</if>
+			<if test="scannerMobile != null and scannerMobile != '' ">
+				AND tu.mobile = #{scannerMobile}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_coupon" parameterType="coupon" resultMap="coupon_DB_Result">
+		SELECT
+		t.code
+		,t.amount
+		,t.cny_price
+		,t.use_times
+		,t.style
+		
+		,t.status
+		,t.creator
+		,(select login_name from tstd_user tu where tu.user_id=t.creator) as creator_name
+		,t.create_datetime
+		,t.scanner
+		
+		,tu.mobile as scanner_mobile
+		,t.scan_datetime
+		,t.company_code
+		,(select domain from tstd_company tc where tc.code = t.company_code) as domain
+		,t.system_code
+		FROM
+		tstd_coupon t left join tstd_user tu on t.scanner = tu.user_id
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_coupon_count" parameterType="coupon"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_coupon t left join tstd_user tu on t.scanner = tu.user_id
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_coupon" parameterType="coupon">
+		INSERT INTO
+		tstd_coupon(
+		code
+		,amount
+		,cny_price
+		,use_times
+		,style
+		
+		,status
+		,creator
+		,create_datetime
+		,company_code
+		,system_code
+		)
+		VALUES(
+		#{code}
+		,#{amount}
+		,#{cnyPrice}
+		,#{useTimes}
+		,#{style}
+		
+		,#{status}
+		,#{creator}
+		,#{createDatetime}
+		,#{companyCode}
+		,#{systemCode}
+		)
+	</insert>
+
+	<update id="update_coupon_status" parameterType="coupon">
+		UPDATE tstd_coupon
+		SET
+		status = #{status}
+		,scanner = #{scanner}
+		,scan_datetime = #{scanDatetime}
+		WHERE code = #{code}
+	</update>
+</mapper>
