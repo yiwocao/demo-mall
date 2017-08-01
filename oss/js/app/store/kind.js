@@ -75,7 +75,7 @@ $(function() {
         }
         if (selRecords[0].status == 1) {
 
-            confirm("确认下架该商品类别？").then(function() {
+            confirm("确认下架该商品类别吗？").then(function() {
                 reqApi({
                     code: '808004',
                     json: { "code": selRecords[0].code }
